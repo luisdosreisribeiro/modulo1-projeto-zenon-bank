@@ -55,6 +55,35 @@ public class Main {
         IO.println("Fraudes por tipo:");
         transactionTypeLongMap.forEach((type, count) -> IO.println("- %s: %d".formatted(type, count)));
 
+        IO.println("-------------------------------------------");
+
+        TransactionRepository transactionRepository;
+        transactionRepository = new TransactionListRepository(transactions);
+
+        String nomeOrigem = "C1234586";
+        transactionRepository.buscarPorNome(nomeOrigem)
+                .ifPresentOrElse(IO::println, () -> IO.println("Transação não encontrada para " + nomeOrigem));
+
+        String nomeOrigemPresente = "C1868032458";
+        long startTimeList = System.nanoTime();
+        transactionRepository.buscarPorNome(nomeOrigemPresente)
+                .ifPresentOrElse(IO::println, () -> IO.println("Transação não encontrada para " + nomeOrigemPresente));
+        long endTimeList = System.nanoTime();
+        IO.println("Tempo de busca - List (ms): " + (endTimeList - startTimeList) / 1_000_000.0);
+
+        transactionRepository = new TransactionMapRepository(transactions);
+
+        transactionRepository.buscarPorNome(nomeOrigem)
+                .ifPresentOrElse(IO::println, () -> IO.println("Transação não encontrada para " + nomeOrigem));
+
+
+        startTimeList = System.nanoTime();
+        transactionRepository.buscarPorNome(nomeOrigemPresente)
+                .ifPresentOrElse(IO::println, () -> IO.println("Transação não encontrada para " + nomeOrigemPresente));
+        endTimeList = System.nanoTime();
+        IO.println("Tempo de busca - Map (ms): " + (endTimeList - startTimeList) / 1_000_000.0);
+
+
 
     }
 }
