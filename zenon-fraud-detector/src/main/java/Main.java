@@ -1,10 +1,9 @@
-import br.com.zenon.Transaction;
-import br.com.zenon.TransactionCustomer;
-import br.com.zenon.TransactionIngestor;
-import br.com.zenon.TransactionType;
+import br.com.zenon.*;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
+import java.util.Spliterator;
 
 public class Main {
     static void main() {
@@ -34,16 +33,28 @@ public class Main {
 
         var transactionIngestor = new TransactionIngestor();
         List<Transaction> transactions = transactionIngestor.read("data/PS_20174392719_1491204439457_log.csv");
-        //IO.println(transactions.size());
 
-        transactions.stream().limit(10).forEach(IO::println);
+        var fraudAnalyser = new FraudAnalyser(transactions);
 
-        IO.println("-------------------------------------------");
+        long countFrauds = fraudAnalyser.countFrauds();
+        IO.println("1. Total de Fraudes: " + countFrauds);
 
-        List<Transaction> transactionsBadData = transactionIngestor.read("data/paysim_with_bad_data.csv");
-        IO.println(transactionsBadData.size());
+        List<BigDecimal> top3AmountFraud = fraudAnalyser.listarTop3Amount();
+        IO.println("2. Top 3 Fraudes de Maior Valor: ");
+        top3AmountFraud.forEach(amount ->IO.println("-%.2f".formatted(amount)));
 
-        transactionsBadData.forEach(IO::println);
+
+        List<String> listarNomesSusteitos = fraudAnalyser.listarNomesSusteitos();
+        IO.println("3. Clientes Suspeitos: ");
+        listarNomesSusteitos.forEach(IO::println);
+
+        BigDecimal bigDecimal = fraudAnalyser.obterPrejuizoTotalDeFraudes();
+        IO.println("4. Prejuízo total: " + bigDecimal);
+
+        Map<TransactionType, Long> transactionTypeLongMap = fraudAnalyser.totalDeFraudesPorTipo();
+        IO.println("Fraudes por tipo:");
+        transactionTypeLongMap.forEach((type, count) -> IO.println("- %s: %d".formatted(type, count)));
+
 
     }
 }

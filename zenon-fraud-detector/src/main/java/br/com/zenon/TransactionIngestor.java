@@ -8,6 +8,8 @@ import java.util.Optional;
 
 public class TransactionIngestor {
 
+    public static final int FRAUD_LIMIT = 50000;
+
     public List<Transaction> read(String fileName) {
         Path path = Path.of(fileName);
 
@@ -15,7 +17,7 @@ public class TransactionIngestor {
             List<String> lines = Files.readAllLines(path);
             return lines.stream()
                     .skip(1)
-                    .limit(1000)
+                    .limit(FRAUD_LIMIT)
                     .map(this::parseTransaction)
                     .filter(Optional::isPresent)
                     .map(Optional::get)
