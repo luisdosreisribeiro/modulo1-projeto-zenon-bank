@@ -33,6 +33,7 @@ public class Main {
 
         var transactionIngestor = new TransactionIngestor();
         List<Transaction> transactions = transactionIngestor.read("data/PS_20174392719_1491204439457_log.csv");
+        IO.println(transactions.size());
 
         var fraudAnalyser = new FraudAnalyser(transactions);
 
