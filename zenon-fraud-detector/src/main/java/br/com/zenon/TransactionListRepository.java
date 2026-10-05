@@ -14,10 +14,15 @@ public class TransactionListRepository implements TransactionRepository {
     }
 
     @Override
-    public Optional<Transaction> buscarPorNome(String nome) {
+    public void save(Transaction transaction) {
+        this.transactions.add(transaction);
+    }
+
+    @Override
+    public Optional<Transaction> buscarPorNomeOrigem(String nomeOrigem) {
         return transactions
                 .stream()
-                .filter(transaction -> transaction.origin().name().equalsIgnoreCase(nome))
+                .filter(transaction -> transaction.origin().name().equalsIgnoreCase(nomeOrigem))
                 .findFirst();
 
     }

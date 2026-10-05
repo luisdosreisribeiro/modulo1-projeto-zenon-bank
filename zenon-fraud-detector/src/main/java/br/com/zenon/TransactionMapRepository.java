@@ -19,10 +19,13 @@ public class TransactionMapRepository implements TransactionRepository{
     }
 
 
-
+    @Override
+    public void save(Transaction transaction) {
+        this.transactionByOriginName.putIfAbsent(transaction.origin().name(), transaction);
+    }
 
     @Override
-    public Optional<Transaction> buscarPorNome(String nome) {
-        return Optional.ofNullable(transactionByOriginName.get(nome));
+    public Optional<Transaction> buscarPorNomeOrigem(String nomeOrigem) {
+        return Optional.ofNullable(transactionByOriginName.get(nomeOrigem));
     }
 }

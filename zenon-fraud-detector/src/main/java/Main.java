@@ -3,7 +3,6 @@ import br.com.zenon.*;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
-import java.util.Spliterator;
 
 public class Main {
     static void main() {
@@ -62,24 +61,24 @@ public class Main {
         transactionRepository = new TransactionListRepository(transactions);
 
         String nomeOrigem = "C1234586";
-        transactionRepository.buscarPorNome(nomeOrigem)
+        transactionRepository.buscarPorNomeOrigem(nomeOrigem)
                 .ifPresentOrElse(IO::println, () -> IO.println("Transação não encontrada para " + nomeOrigem));
 
         String nomeOrigemPresente = "C1868032458";
         long startTimeList = System.nanoTime();
-        transactionRepository.buscarPorNome(nomeOrigemPresente)
+        transactionRepository.buscarPorNomeOrigem(nomeOrigemPresente)
                 .ifPresentOrElse(IO::println, () -> IO.println("Transação não encontrada para " + nomeOrigemPresente));
         long endTimeList = System.nanoTime();
         IO.println("Tempo de busca - List (ms): " + (endTimeList - startTimeList) / 1_000_000.0);
 
         transactionRepository = new TransactionMapRepository(transactions);
 
-        transactionRepository.buscarPorNome(nomeOrigem)
+        transactionRepository.buscarPorNomeOrigem(nomeOrigem)
                 .ifPresentOrElse(IO::println, () -> IO.println("Transação não encontrada para " + nomeOrigem));
 
 
         startTimeList = System.nanoTime();
-        transactionRepository.buscarPorNome(nomeOrigemPresente)
+        transactionRepository.buscarPorNomeOrigem(nomeOrigemPresente)
                 .ifPresentOrElse(IO::println, () -> IO.println("Transação não encontrada para " + nomeOrigemPresente));
         endTimeList = System.nanoTime();
         IO.println("Tempo de busca - Map (ms): " + (endTimeList - startTimeList) / 1_000_000.0);
